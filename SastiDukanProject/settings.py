@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'category',
     'accounts',
     'store',
+    'carts',
 ]
 
 MIDDLEWARE = [
@@ -65,7 +66,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'category.context_processor.menu_links', # added during creatig menu in add category
+                'category.context_processor.menu_links',
+                'carts.context_processor.counter', # added during creatig menu in add category
             ],
         },
     },
@@ -75,6 +77,7 @@ WSGI_APPLICATION = 'SastiDukanProject.wsgi.application'
 
 
 AUTH_USER_MODEL = 'accounts.Account'
+#CART_SESSION_ID = 'cart' #added as cart was not working
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
