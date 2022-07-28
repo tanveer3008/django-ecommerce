@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.home,name='home'),
     path('store/',include('store.urls')),
-    path('cart/',include('carts.urls')), # in the begging url search at project level , so we are dredirecting it from here to d store.urls
+    path('cart/',include('carts.urls')),
+    path('accounts/',include('accounts.urls')),# in the begging url search at project level , so we are dredirecting it from here to d store.urls
 ]+ static(settings.MEDIA_URL , document_root=settings.MEDIA_ROOT)

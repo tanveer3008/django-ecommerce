@@ -136,4 +136,73 @@ STATICFILES_DIRS = [
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR /'media'
 
+
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+} # added as we are using msgs in django during registartion page
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+#SMTP configuration
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'sastidukanshopping@gmail.com'
+EMAIL_HOST_PASSWORD = 'rwbqqjlkvilwewgi'
+EMAIL_USE_TLS = 'True'
+
+"""
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp-mail.outlook.com'
+EMAIL_HOST_USER = "sastidukanproject123@outlook.com"
+EMAIL_HOST_PASSWORD = "Sastidukan3008"
+
+EMAIL_BACKEND = 'django_imap_backend.ImapBackend'
+EMAIL_IMAP_SECRETS = [
+    {
+        'HOST': 'imap.gmail.com',
+        'PORT': 993,  # default 143 and for SSL 993
+        'USER': 'sastidukanshopping@gmail.com',
+        'PASSWORD': 'Sastidukan3008',
+        'MAILBOX': 'my_project',  # Created if not exists
+        'SSL': False  # Default
+    }
+]
+
+MAIL_BACKEND = 'django_imap_backend.ImapBackend'
+EMAIL_IMAP_SECRETS = [
+    {
+        'HOST': 'imap-mail.outlook.com',
+        'PORT': 993,  # default 143 and for SSL 993
+        'USER': 'sastidukanproject123@outlook.com',
+        'PASSWORD': 'Sastidukan3008',
+        'MAILBOX': 'my_project',  # Created if not exists
+        'SSL': True  # Default
+    }
+]
+
+
+EMAIL_HOST = 'smtp-relay.sendinblue.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'sastidukanshopping@gmail.com'
+EMAIL_HOST_PASSWORD = 'pEtZzcHKBU2fkOrQ'
+EMAIL_USE_TLS = 'True'
+
+
+
+EMAIL_HOST = 'in-v3.mailjet.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'sastidukanshopping@yahoo.com'
+EMAIL_HOST_PASSWORD = 'Sastidukan@3008'
+EMAIL_USE_TLS = 'True'
+
+
+
+EMAIL_BACKEND = 'django_mailjet.backends.MailjetBackend'
+MAILJET_API_KEY = '1279bd6e9158cfbbe4888760a79a2f71'
+MAILJET_API_SECRET = '53a99deda43ae23bb298459684473296'
+"""

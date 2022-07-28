@@ -7,11 +7,11 @@ $(document).ready(function() {
 
     /* ///////////////////////////////////////
 
-    THESE FOLLOWING SCRIPTS ONLY FOR BASIC USAGE, 
+    THESE FOLLOWING SCRIPTS ONLY FOR BASIC USAGE,
     For sliders, interactions and other
 
     */ ///////////////////////////////////////
-    
+
 
 	//////////////////////// Prevent closing from click inside dropdown
     $(document).on('click', '.dropdown-menu', function (e) {
@@ -54,7 +54,10 @@ $(document).ready(function() {
 
 
 
-    
-}); 
-// jquery end
 
+});
+// jquery end
+// timeout of registation page heading registartion succesful; after 4000 millisecond
+setTimeout(function(){
+  $('#message').fadeOut('slow')
+}, 2000)
