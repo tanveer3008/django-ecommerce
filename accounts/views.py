@@ -13,6 +13,12 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage,send_mail
 
+# assigning user to carts
+
+from carts.views import _cart_id
+from carts.models import Cart , CartItem
+import requests
+
 # Create your views here.
 
 def register(request):
@@ -61,15 +67,71 @@ def login(request):
         user = auth.authenticate(email = email,password = password)
 
         if user is not None:
+            try:
+                cart=Cart.objects.get(cart_id=_cart_id(request))
+                is_cart_item_exists = CartItem.objects.filter(cart = cart).exists()
+                if is_cart_item_exists:
+                    cart_item=CartItem.objects.filter(cart=cart)
+
+                    # we were facing issue when we add same variation without logging in and then
+                    #if we login then it was creating separate entry , below code is to resolve that issue.
+
+                    # here alll variation are getting which are added when we are not logged in
+                    product_variation = []
+                    for item in cart_item:
+                        variation = item.variations.all() # this comes from cart
+                        product_variation.append(list(variation))
+                            # here we are getting caarts items of that user
+                    cart_item=CartItem.objects.filter(user=user)
+                    ex_var_list = []
+                    crt_item_id = [] # id of each item in list
+
+                    for item in cart_item:
+                        existing_variation = item.variations.all() # this comes from database
+                        ex_var_list.append(list(existing_variation))
+                        crt_item_id.append(item.id)
+                        # checking if the producuct variation is in users cart item
+                    for pv in product_variation:
+                        if pv in ex_var_list:
+                            index = ex_var_list.index(pv)
+                            item_id = crt_item_id[index]
+                            item = CartItem.objects.get(id=item_id)
+                            item.quantity += 1
+                            item.user = user
+                            item.save()
+                    else:
+                        pass
+                        """
+                        cart_item=CartItem.objects.filter(cart=cart)
+                        for item in cart_item:
+                            item.user = user
+                            item.save()"""
+
+            except:
+                pass
             auth.login(request,user)
             messages.success(request,'You are now logged in')
             #return redirect('home')
-            return redirect('dashboard')
+            # when user is logged in then insted of dashboard user should go to checkout page.
+            # this issue was happening because in this function we redirected user to  login_url
+            # as a solution we are checking via url if user is coming from chckout page , if yes user will be
+            # redirected to checkout page
+            url=request.META.get('HTTP_REFERER')
+            try:
+                print('url',url)
+                query=requests.utils.urlparse(url).query
+                params=dict(x.split('=') for x in query.split('&'))
+                print('params--',params)
+                if 'next' in params:
+                    nextPage=params['next']
+                    return redirect(nextPage)
+            #next=cart/checkout
+            except:
+                return redirect('dashboard')
         else:
             messages.error(request,'Invalid Login Credentials')
             return redirect('login')
     return render(request,'accounts/login.html')
-
 
 @login_required(login_url = 'login')
 def logout(request):
