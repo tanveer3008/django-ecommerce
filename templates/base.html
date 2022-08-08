@@ -28,6 +28,9 @@
 <!-- custom javascript -->
 <script src={% static 'js/script.js' %} type="text/javascript"></script>
 
+<script src="https://www.paypal.com/sdk/js?client-id=AQ65QUQ50rNEnKFbsIyjAW2y-lrX0MqbJ2Fs6Wm5j7rR1zH7xoPzA2-oq3-OmkBYD6A5UDU3T8UHeaLb&currency=USD"></script>
+
+
 <script type="text/javascript">
 /// some script
 
@@ -50,3 +53,10 @@ $(document).ready(function() {
 
   <!-- <footer> -->
   {% include 'includes/footer.html' %}
+    <!-- <razorpay scripts
+  {% block scripts %}
+
+  <script src={% static 'js/checkout.js' %} type="text/javascript"></script>
+
+  {% endblock scripts%}
+ > -->

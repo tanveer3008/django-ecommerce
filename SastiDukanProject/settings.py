@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'accounts',
     'store',
     'carts',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -206,3 +207,12 @@ EMAIL_BACKEND = 'django_mailjet.backends.MailjetBackend'
 MAILJET_API_KEY = '1279bd6e9158cfbbe4888760a79a2f71'
 MAILJET_API_SECRET = '53a99deda43ae23bb298459684473296'
 """
+
+
+#Razorpay
+
+#RAZORPAY_API_KEY=''
+#RAZORPAY_API_SECRET_KEY=''
+
+RAZOR_KEY_ID = 'rzp_test_uJFHkZbnqRRqyD'
+RAZOR_KEY_SECRET = '4ocIRtnCSduswkRb129zNHjm'
