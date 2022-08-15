@@ -82,3 +82,7 @@
 }
 
 /*# sourceMappingURL=responsive.css.map */
+/* Hide Radio button */
+.rate > input{
+  display: none;
+}
