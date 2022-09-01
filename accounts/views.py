@@ -1,9 +1,10 @@
-from django.shortcuts import render , redirect
-from .forms import RegistrationForm
-from .models import Account
+from django.shortcuts import render , redirect,get_object_or_404
+from .forms import RegistrationForm,UserForm,UserProfileForm
+from .models import Account,UserProfile
 from django.contrib import messages,auth
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from orders.models import Order
 
 # verification send mail_subject
 from django.contrib.sites.shortcuts import get_current_site
@@ -34,6 +35,11 @@ def register(request):
             user = Account.objects.create_user(first_name = first_name , last_name = last_name , email = email , username = username , password = password)
             user.phone_number = phone_number
             user.save()
+
+            profile=UserProfile()
+            profile.user_id=user.id
+            profile.profile_picture='default/admin-logo.png'
+            profile.save()
 
             # user activation -- initially the user is not actyive , once user clicks the link we shared then it will be activated
             current_site = get_current_site(request) # get the cureent site domain
@@ -156,11 +162,26 @@ def activate(request,uidb64,token):
     else:
         messages.success(request,'Oopsss! , Activation Link is expired')
         return redirect('register')
+
+
 @login_required(login_url = 'login') # it is a decorator which we will force you to login if you are not logged in
 def dashboard(request):
-    #return HttpResponse('ok')
-    return render(request,'accounts/dashboard.html')
-
+    orders = Order.objects.order_by('-created_at').filter(user_id=request.user.id, is_ordered=True)
+    #print(orders)
+    orders_count = orders.count()
+    context = {
+        'orders_count': orders_count,
+        'orders':orders,
+    }
+    return render(request,'accounts/dashboard.html',context)
+# my orders in dashboard
+def my_orders(request):
+    orders = Order.objects.order_by('-created_at').filter(user_id=request.user.id, is_ordered=True)
+    print(orders)
+    context = {
+        'orders':orders,
+    }
+    return render(request,'accounts/my_orders.html',context)
 
 def forgotpassword(request):
     #return HttpResponse('ok')
@@ -223,3 +244,38 @@ def resetpassword(request):
     else:
         #return HttpResponse('ok')
         return render(request,'accounts/resetpassword.html')
+
+def edit_profile(request):
+    userprofile = get_object_or_404(UserProfile,user=request.user)
+    if request.method=='POST':
+        user_form=UserForm(request.POST,instance=request.user)
+        profile_form=UserProfileForm(request.POST,request.FILES,instance=userprofile) # we neeed to update profile picture also thats why we included request.FILES
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request,"Profile update is succesful")
+            return redirect('edit_profile')
+    else:
+        user_form=UserForm(instance=request.user)
+        profile_form=UserProfileForm(instance=userprofile)
+    context={
+        'user_form':user_form,
+        'profile_form':profile_form,
+        'userprofile':userprofile,
+    }
+
+    return render(request,'accounts/edit_profile.html',context)
+
+def tracker(request):
+    orders = Order.objects.order_by('-created_at').filter(user_id=request.user.id, is_ordered=True)
+    #print(orders)
+    orders_count = orders.count()
+    for order in orders:
+
+        print("order number",order.order_number)
+    context = {
+        'orders_count': orders_count,
+        'orders':orders,
+    }
+
+    return render(request,'accounts/tracker.html',context)
